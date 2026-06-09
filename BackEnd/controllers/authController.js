@@ -55,6 +55,22 @@ const login =async(req,res)=>{
         return res.status(400).json({success:false,message:"Invalid password",error:"invalid password"})
        }
        
+       const token = jwt.sign(
+           { id: user._id },
+           process.env.JWT_SECRET,
+           { expiresIn: "2d" }
+       );
+
+       res.status(200).json({
+           success: true,
+           message: "User Logged In Successfully",
+           data: {
+               id: user._id,
+               username: user.username,
+               email: user.email
+           },
+           token
+       });
         
     } catch (error) {
         res.status(500).json({success:false,message:"Error In Logging In User",error})
@@ -62,4 +78,4 @@ const login =async(req,res)=>{
     }
 }
 
-mosule.exports={register,login}
+module.exports={register,login}
